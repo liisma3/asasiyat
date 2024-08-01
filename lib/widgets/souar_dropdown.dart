@@ -1,56 +1,72 @@
 // ignore_for_file: unnecessary_import
 
-import 'package:asasiyat/controllers/asas_controller.dart';
+import 'package:asasiyat/constants/data_helper.dart';
+import 'package:asasiyat/controllers/stage_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
-class SouarDropdown extends StatelessWidget {
-  final souar;
+class SouarDropdown extends StatefulWidget {
   // AsasController c = Get.find(tag: 'asasInstance');
-  SouarDropdown({super.key, required this.souar});
+  SouarDropdown({super.key});
 
+  @override
+  State<SouarDropdown> createState() => _SouarDropdownState();
+}
+
+class _SouarDropdownState extends State<SouarDropdown> {
   GlobalKey souarDropdownKey = GlobalKey();
+  static final controller = Get.put(StageController());
+
+  String souraNameSelected = '';
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(AsasController());
+    List<Map<String, dynamic>>? souarNames =
+        DataHelper.CategoryLabel[controller.categorySelected]!.toList();
 
-    var souraNameSelected;
-    print(souar);
+    var names = souarNames!
+        .map(
+          (e) => e["souraName"],
+        )
+        .toList();
+    //List _souraNames = jsonEncode(souarNames);
+//    print(names);
 
-    try {
-      return Obx(() => Container(
-            height: 20,
-            child: DropdownButton<String>(
-                underline: Container(),
-                hint: Text("Select category"),
-                icon: const Icon(Icons.keyboard_arrow_down),
-                isDense: true,
-                isExpanded: true,
-                items: [
-                  ...this.souar.map(
-                        (souraName) => DropdownMenuItem<String>(
-                          value: souraName["souraNb"],
-                          child: Text(souraName["souraName"]),
-                        ),
-                      )
-                ],
-                value: controller.souraNameSelected,
-                onChanged: (value) {
-                  controller.setSouraNameSelected = value!;
-                  souraNameSelected = value;
-                  // print(await this.ca);
+    // print(controller.categorySelected);
+    //if (controller.souraNameSelected != "") {
+    // print(controller.souraNameSelected);
 
-                  //  c.category[value];
-                }),
-          ));
+    //}
 
-      //Padding
-    } catch (e) {
-      debugPrint("e");
-      return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20), child: Text("$e"));
-    }
+    return Obx(
+      () => Container(
+        height: 20,
+        child: DropdownButton<String>(
+            hint: Text("Select soura"),
+            icon: const Icon(Icons.keyboard_arrow_down),
+            isDense: true,
+            // isExpanded: true,
+            items: names.map((souraName) {
+              //print(souraName);
+              return DropdownMenuItem<String>(
+                value: souraName.toString(),
+                child: Text(souraName.toString()),
+              );
+            }).toList(),
+            value: controller.souraNameSelected != souraNameSelected
+                ? controller.souraNameSelected
+                : souraNameSelected != ''
+                    ? souraNameSelected
+                    : names[0],
+            onChanged: (value) {
+              controller.setSouraNameSelected = value!;
+              souraNameSelected = value;
+              setState(() {});
+            }),
+      ),
+    );
   }
+
+  //Padding
 }

@@ -1,27 +1,26 @@
-import 'package:asasiyat/asas_module/views/asas_viewer.dart';
-import 'package:asasiyat/controllers/asas_controller.dart';
-import 'package:asasiyat/widgets/asasiyat-drawer.dart';
-import 'package:asasiyat/widgets/asasiyat_navbar.dart';
+import 'package:asasiyat/views/stage_viewer.dart';
+import 'package:asasiyat/widgets/soura_navbar.dart';
+import 'package:asasiyat/widgets/stage_asasiyat_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AsasScreen extends StatelessWidget {
-  AsasScreen({super.key});
-  final AsasController c = Get.put(AsasController());
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
+class StageScreen extends StatelessWidget {
+  StageScreen({super.key});
+  final GlobalKey scaffoldKey = GlobalKey();
+  final int souraNb = int.parse(Get.parameters['souraNb']!);
+
 
   @override
   Widget build(BuildContext context) {
     // ignore: unused_local_variable
+   
     return Scaffold(
       key: scaffoldKey,
-      drawer: asasdrawer(context: scaffoldKey),
-      appBar: AsasiatNavBar(
-          context: context,
-          key: scaffoldKey,
-          nextRoute: 'alasas',
-          title: 'asas'),
-      body: AsasViewer(),
+      appBar: PreferredSize(
+        child: SouraNavbar(souraNb: souraNb,),
+        preferredSize: Size.fromHeight(110),
+      ),
+      body: StageViewer(souraNb: souraNb),
     );
   }
 }

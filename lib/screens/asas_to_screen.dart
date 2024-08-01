@@ -21,7 +21,7 @@ class AsasToScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AsasiatNavBar(
+        appBar: AsasiyatNavBar(
             context: context,
             key: AsastoKey,
             nextRoute: 'stages',

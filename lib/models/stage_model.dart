@@ -16,32 +16,32 @@ class Ayah {
   }
 }
 
-
-
 class Stage {
+  late bool paused = false;
   late final String souraName;
   late final int souraNb;
   late final int grid;
   late final List<Ayah> ayahs;
 
-  Stage({required this.souraName, required this.souraNb, required this.grid});
-  Stage.initStage(){
-    this.souraName="".obs as String;
-    this.souraNb=0.obs as int;
-    this.grid= 0.obs as int;
+  Stage(
+      {required this.souraName,
+      required this.souraNb,
+      required this.grid,
+      this.paused = false});
+  Stage.initStage() {
+    this.souraName = "".obs as String;
+    this.souraNb = 0.obs as int;
+    this.grid = 0.obs as int;
   }
-  Map<String, dynamic>? toMap() {
+  Map<String, dynamic>? toMap(Stage stage) {
     return <String, dynamic>{
-      "souraName": souraName,
-      "souraNb": souraNb,
-      "grid": grid,
-      "ayas": ayahs
+      "souraName": stage.souraName,
+      "souraNb": stage.souraNb,
+      "grid": stage.grid,
+      "ayas": stage.ayahs
     };
   }
 
-/*   String toJson() => json.encode(toMap);
-   
-  factory Stage.fromJson(String source) {
-    return Stage.fromMap(json.decode(source) as Map<String, dynamic>);
-  } */
+  factory Stage.fromMap(Map<String, dynamic> map) => Stage(
+      souraName: map['souraName'], grid: map['grid'], souraNb: map['souraNb']);
 }

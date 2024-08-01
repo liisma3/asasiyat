@@ -4,6 +4,7 @@ import 'package:asasiyat/controllers/stage_controller.dart';
 import 'package:asasiyat/widgets/asasiyat-drawer.dart';
 import 'package:asasiyat/widgets/bottom_navigation.dart';
 import 'package:asasiyat/widgets/categories_dropdown.dart';
+import 'package:asasiyat/widgets/souar_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,18 +18,28 @@ class AsasViewer extends StatefulWidget {
 }
 
 class _AsasViewerState extends State<AsasViewer> {
-  static final controller = Get.put(StageController());
   List<int> _catOrder = [];
   // static List<String> categories = DataHelper.CategoryLabel.keys.toList();
   //static String cat = categories.first;
-  static List<Map<String, dynamic>> souraAsasList =
-      DataHelper.CategoryLabel["${controller.categorySelected}"]!.toList();
 
   @override
   Widget build(BuildContext context) {
-    print("categories : ${controller.categorySelected}");
-    print(
-        "dataH : ${DataHelper.CategoryLabel["${controller.categorySelected}"]![0].toString()}");
+    StageController controller = Get.put(StageController());
+
+    /* print("categories : ${controller.categorySelected}");
+    List<Map<String, dynamic>> souraAsasList =
+        DataHelper.CategoryLabel["${controller.categorySelected}"]!.toList();
+
+    print("asasViewer ${souraAsasList}");
+ */
+    //Map<String, List<Map<String, dynamic>>>
+    // var keys = DataHelper.CategoryLabel.keys.toList();
+    // var catNames = DataHelper.CategoryLabel[keys[1]]!.toList();
+    //var souar = catNames.map(
+    //  (e) => e.entries,
+    //);
+    //List<Map<String, dynamic>> _catNames = Map.from(catNames);
+    // print(" keys : $keys, souar : $souar");
     //debugPrint(_catOrder.toString());
 
     return Scaffold(
@@ -41,9 +52,12 @@ class _AsasViewerState extends State<AsasViewer> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Expanded(child: CategoriesDropdown()),
-                //SouarDropdown(),
+                Expanded(
+                  child: SouarDropdown(),
+                ),
 
-                Text("catSelected ${controller.categorySelected} "),
+                Text(
+                    "Number of souar ${DataHelper.CategoryLabel["${controller.categorySelected}"]!.toList().length} "),
                 //              Text("${controller.souraAsasList.length} souras  "),
                 Switch(
                     value: controller.asasTest,
@@ -53,9 +67,14 @@ class _AsasViewerState extends State<AsasViewer> {
               ],
             ),
             Expanded(
+              flex: 9,
+
               child: ListView.builder(
-                  itemCount: souraAsasList.length,
-                  itemBuilder: (BuildContext contect, int index) {
+                  itemCount: DataHelper
+                      .CategoryLabel["${controller.categorySelected}"]!
+                      .toList()
+                      .length,
+                  itemBuilder: (BuildContext context, int index) {
                     return Dismissible(
                       direction: DismissDirection.startToEnd,
                       key: UniqueKey(),
@@ -71,12 +90,16 @@ class _AsasViewerState extends State<AsasViewer> {
                         ),
                       ),
                       onDismissed: (direction) => {
-                        if (direction == DismissDirection.startToEnd)
-                          {_catOrder.add(souraAsasList[index]["souraNb"])}
                       },
                       child: ListTile(
                         onTap: () {
-                          debugPrint(souraAsasList[index]["souraName"]);
+                        //  if (direction == DismissDirection.startToEnd)
+                          {_catOrder.add(DataHelper.CategoryLabel["${controller.categorySelected}"]!
+                              .toList()[index]["souraNb"]);
+                          }
+                          debugPrint(DataHelper
+                              .CategoryLabel["${controller.categorySelected}"]!
+                              .toList()[index]["souraName"]);
                         },
                         trailing: Icon(
                           Icons.check_box_outlined,
@@ -89,8 +112,9 @@ class _AsasViewerState extends State<AsasViewer> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                  "index : $index      ${souraAsasList[index]["souraName"]}"),
-                              Text("${souraAsasList[index]["souraNb"]}"),
+                                  "index : $index      ${DataHelper.CategoryLabel["${controller.categorySelected}"]!.toList()[index]["souraName"]}"),
+                              Text(
+                                  "${DataHelper.CategoryLabel["${controller.categorySelected}"]!.toList()[index]["souraNb"]}"),
                             ],
                           ),
                         ),

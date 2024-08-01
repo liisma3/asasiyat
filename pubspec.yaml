@@ -1,7 +1,5 @@
 name: asasiyat
-description: "A new Flutter project."
-# The following line prevents the package from being accidentally published to
-# pub.dev using `flutter pub publish`. This is preferred for private packages.
+description: "Asasiyat by toutafait."
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
@@ -45,6 +43,15 @@ dependencies:
   get_storage:
   flutter_screenutil: ^5.9.3
   flutter_vector_icons: ^2.0.0
+  encrypt: ^5.0.3
+  country_picker: ^2.0.26
+  pinput: ^5.0.0
+  image_picker: ^1.1.2
+  image_cropper: ^7.1.0
+  uuid: ^4.4.2
+  lottie: ^3.1.2
+  firebase_auth: ^5.1.2
+  firebase_ui_auth: ^1.15.0
   
 dev_dependencies:
   flutter_test:

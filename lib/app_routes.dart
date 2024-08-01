@@ -15,7 +15,9 @@ import 'package:asasiyat/screens/asas_screen.dart';
 import 'package:asasiyat/screens/asas_to_screen.dart';
 import 'package:asasiyat/screens/guests_tabs_screen.dart';
 import 'package:asasiyat/screens/sprints_screen.dart';
+import 'package:asasiyat/screens/stage_screen.dart';
 import 'package:asasiyat/screens/stages_screen.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 //import 'package:get/get_navigation/src/routes/transitions_type.dart';
@@ -43,7 +45,12 @@ List drawerMenuNames = [
   HostsPageRoute,
 ];
 List<GetPage<dynamic>> pagesRoute = [
-  GetPage(name: '/home', page: () => AppScreen()), //AsasScreen()), //
+  GetPage(
+      name: '/home',
+      page: () => AppScreen()), //AppScreen()), //AsasScreen()), //
+  GetPage(
+      name: '/', page: () => AppScreen()), //AppScreen()), //AsasScreen()), //
+
   GetPage(name: '/asas', page: () => AsasScreen()),
   GetPage(name: '/alasas', page: () => AlAsasScreen()),
   GetPage(name: '/asasto', page: () => AsasToScreen()),
@@ -52,10 +59,16 @@ List<GetPage<dynamic>> pagesRoute = [
     page: () => GuestsTabsViewer(),
   ),
   GetPage(name: '/login', page: () => AuthForm()),
+  GetPage(name: '/sign-in', page: () => SignInScreen()),
+  GetPage(name: '/profile/:id', page: () => ProfileScreen()),
   GetPage(
       name: '/sprints', page: () => SprintsView(), transition: Transition.zoom),
   GetPage(
       name: '/stages/:grid',
       page: () => StagesScreen(),
+      transition: Transition.zoom),
+  GetPage(
+      name: '/stage/:souraNb',
+      page: () => StageScreen(),
       transition: Transition.zoom),
 ];

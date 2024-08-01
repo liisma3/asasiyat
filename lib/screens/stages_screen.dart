@@ -4,36 +4,88 @@ import 'dart:math';
 import 'package:asasiyat/constants/data_helper.dart';
 import 'package:asasiyat/controllers/stage_controller.dart';
 import 'package:asasiyat/widgets/asasiyat-drawer.dart';
-import 'package:asasiyat/widgets/stag_navbar.dart';
+import 'package:asasiyat/widgets/stage_asasiyat_navbar.dart';
 import 'package:asasiyat/widgets/stage_bottom_navigation.dart';
 import 'package:asasiyat/widgets/stage_categories_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
-class StagesScreen extends StatelessWidget {
+class StagesScreen extends StatefulWidget {
   StagesScreen({super.key});
+
+  //List<Widget> souarWidget = DataHelper.CategoryLabel["${controller.stageCategorySelected}"]!.toList().map((e) => Text("${e["souraName"]}")).toList();
+  @override
+  State<StagesScreen> createState() => _StagesScreenState();
+}
+
+class _StagesScreenState extends State<StagesScreen> {
   final GlobalKey scaffoldKey = GlobalKey();
   final int gridNb = int.parse(Get.parameters['grid']!);
-  void validate(String value) {
-    print('$value');
+  /* List<Map<String, dynamic>> souarNames = DataHelper
+      .CategoryLabel["${DataHelper.CategoryLabel.keys.toList()[0]}"]!
+      .toList();
+ */
+  final controller = Get.put(StageController());
+  List<int> sortGridTest = [0];
+  late Set souarShuffeled = Set();
+  late Set souarNamesSet = Set();
+  Future getSouarShuffeled(String cat) async {
+    final souars = DataHelper.CategoryLabel[cat]!.toList();
+    souarNamesSet.addAll(souars);
+
+    // print("souarNamesSet $souarNamesSet");
+    setState(() {
+      souarShuffeled.addAll(DataHelper.shuffleArray(souars).toList());
+    });
+  }
+
+  @override
+  void initState() {
+    var storage = GetStorage('asasStorage');
+    final guestToken = storage.read("guestToken ");
+    final hostToken = storage.read("hostToken");
+    final phoneNb = storage.read("phoneNb");
+
+    print(
+        "registred ${controller.guestRegistred} guest  ${guestToken} host $hostToken phone $phoneNb");
+    /* final List souarNames =
+        List.filled(DataHelper.(DataHelper.CategoryLabel.keys.toList()[0]), 0); */
+    /*  print(
+        "category selected ${controller.stageCategorySelected ?? controller.stageCategorySelected} /// souar names:${intSouarNames ?? intSouarNames}");
+ */
+    //print(controller.hostRegistred);
+    /*  if (controller.guestRegistred != 0) {
+
+    } else {
+      Future.delayed(
+        Duration(seconds: 1),
+        () => Get.offAndToNamed('/login'),
+      ); */
+    // TODO: implement initState
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print(gridNb);
-    final controller = Get.put(StageController());
+    controller.setGridNb = gridNb;
 
+    print(controller.stageCategorySelected);
     return Scaffold(
         drawer: asasdrawer(context: context),
         appBar: PreferredSize(
-          child: StagNavbar(),
+          child: StageAsasiyatNavbar(grid: gridNb),
           preferredSize: Size.fromHeight(110),
         ),
         body: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              StageCategoriesList(),
+              Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.all(10),
+                  child: StageCategoriesList(
+                      getSouarShuffeled: getSouarShuffeled)),
               (Obx(
                 () => Expanded(
                     flex: 9,
@@ -49,28 +101,176 @@ class StagesScreen extends StatelessWidget {
                               children: [
                                   Text(controller.stageCategorySelected),
                                   Expanded(
-                                    child: ListView(
+                                    child: ReorderableListView(
+                                        onReorder: (oldIndex, newIndex) {
+                                          print(
+                                              "oldIndex ${oldIndex} ||| newIndex : $newIndex");
+                                          if (newIndex > oldIndex) {
+                                            newIndex -= 1;
+                                          }
+                                          final items = '';
+                                        },
                                         scrollDirection: Axis.vertical,
-                                        children: [
-                                          ...DataHelper.CategoryLabel[
-                                                  "${controller!.stageCategorySelected}"]!
-                                              .toList()
-                                              .map(
-                                                (e) => Text(
-                                                  "${controller.testSelected ? e["souraNb"] : '_'} :  ${e["souraName"]}",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: Color((Random()
-                                                                      .nextDouble() *
-                                                                  0xFFFFFF)
-                                                              .toInt())
-                                                          .withOpacity(1.0)),
-                                                ),
-                                              )
-                                        ]),
+                                        children: souarShuffeled.isEmpty &&
+                                                !controller.testSelected
+                                            ? [
+                                                ...DataHelper.CategoryLabel[
+                                                        "${controller.stageCategorySelected}"]!
+                                                    .toList()
+                                                    .map(
+                                                      (e) => ListTile(
+                                                        key: UniqueKey(),
+                                                        leading: Container(
+                                                          height: 30,
+                                                          width: 30,
+                                                          decoration: BoxDecoration(
+                                                              color: Colors
+                                                                  .blueAccent,
+                                                              shape: BoxShape
+                                                                  .circle),
+                                                          child: Text(
+                                                              "${e["souraNb"]}",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white38)),
+                                                        ),
+                                                        title: Text(
+                                                          "${e["souraName"]}",
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              color: Color((Random()
+                                                                              .nextDouble() *
+                                                                          0xFFFFFF)
+                                                                      .toInt())
+                                                                  .withOpacity(
+                                                                      1.0)),
+                                                        ),
+                                                        trailing: Container(
+                                                          child: ElevatedButton(
+                                                            onPressed: () => {
+                                                              if (controller
+                                                                  .testSelected)
+                                                                {
+                                                                  Get.toNamed(
+                                                                      "/stage/${e["souraNb"]}"),
+                                                                }
+                                                              else
+                                                                {
+                                                                  print(controller
+                                                                      .sortSouraNb),
+                                                                  if (sortGridTest[
+                                                                          0] ==
+                                                                      0)
+                                                                    {
+                                                                      sortGridTest =
+                                                                          [
+                                                                        e["souraNb"]
+                                                                      ],
+                                                                    }
+                                                                  else
+                                                                    {
+                                                                      sortGridTest =
+                                                                          [
+                                                                        ...sortGridTest,
+                                                                        e["souraNb"]
+                                                                      ]
+                                                                    },
+                                                                  controller
+                                                                          .addToSortSouraNb =
+                                                                      e["souraNb"],
+                                                                  setState(
+                                                                      () {})
+                                                                }
+                                                            },
+                                                            child: Icon(
+                                                                Icons.reorder),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    )
+                                              ]
+                                            : [
+                                                ...souarShuffeled.map(
+                                                  (e) => ListTile(
+                                                    key: UniqueKey(),
+                                                    leading: Container(
+                                                      height: 30,
+                                                      width: 30,
+                                                      decoration: BoxDecoration(
+                                                          color:
+                                                              Colors.blueAccent,
+                                                          shape:
+                                                              BoxShape.circle),
+                                                      child: Text(
+                                                          '${controller.testSelected ? '_' : e["souraNb"]}',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              color: Colors
+                                                                  .white)),
+                                                    ),
+                                                    title: Text(
+                                                      "${e["souraName"]}",
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                          color: Color((Random()
+                                                                          .nextDouble() *
+                                                                      0xFFFFFF)
+                                                                  .toInt())
+                                                              .withOpacity(
+                                                                  1.0)),
+                                                    ),
+                                                    trailing: Container(
+                                                      child: ElevatedButton(
+                                                        onPressed: () => {
+                                                          if (controller
+                                                              .testSelected)
+                                                            {
+                                                              Get.toNamed(
+                                                                  "/stage/${e["souraNb"]}"),
+                                                            }
+                                                          else
+                                                            {
+                                                              print(controller
+                                                                  .sortSouraNb),
+                                                              if (sortGridTest[
+                                                                      0] ==
+                                                                  0)
+                                                                {
+                                                                  sortGridTest =
+                                                                      [
+                                                                    e["souraNb"]
+                                                                  ],
+                                                                }
+                                                              else
+                                                                {
+                                                                  sortGridTest =
+                                                                      [
+                                                                    ...sortGridTest,
+                                                                    e["souraNb"]
+                                                                  ]
+                                                                },
+                                                              controller
+                                                                      .addToSortSouraNb =
+                                                                  e["souraNb"],
+                                                              setState(() {})
+                                                            }
+                                                        },
+                                                        child:
+                                                            Icon(Icons.reorder),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              ]),
                                   )
                                 ])
-                          : Text(" select a category"),
+                          : Text(" please select a category"),
                     )),
               )),
               StageBottomNavigation(scaffoldKey)

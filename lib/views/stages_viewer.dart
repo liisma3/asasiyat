@@ -1,36 +1,18 @@
-import 'package:asasiyat/constants/data_helper.dart';
 import 'package:asasiyat/constants/style.dart';
-import 'package:asasiyat/controllers/stage_controller.dart';
+import 'package:asasiyat/controllers/asas_controller.dart';
 import 'package:asasiyat/widgets/asasiyat-drawer.dart';
 import 'package:asasiyat/widgets/bottom_navigation.dart';
-import 'package:asasiyat/widgets/categories_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 // ignore: must_be_immutable
-
-class AsasViewer extends StatefulWidget {
-  AsasViewer({super.key});
-
-  @override
-  State<AsasViewer> createState() => _AsasViewerState();
-}
-
-class _AsasViewerState extends State<AsasViewer> {
-  static final controller = Get.put(StageController());
+class StagesViewer extends StatelessWidget {
+  StagesViewer({super.key});
+  AsasController c = Get.find(tag: 'asasInstance');
   List<int> _catOrder = [];
-  // static List<String> categories = DataHelper.CategoryLabel.keys.toList();
-  //static String cat = categories.first;
-  static List<Map<String, dynamic>> souraAsasList =
-      DataHelper.CategoryLabel["${controller.categorySelected}"]!.toList();
-
   @override
   Widget build(BuildContext context) {
-    print("categories : ${controller.categorySelected}");
-    print(
-        "dataH : ${DataHelper.CategoryLabel["${controller.categorySelected}"]![0].toString()}");
-    //debugPrint(_catOrder.toString());
-
+    debugPrint(_catOrder.toString());
     return Scaffold(
       drawer: asasdrawer(context: context),
       backgroundColor: Colors.white.withOpacity(.2),
@@ -40,21 +22,19 @@ class _AsasViewerState extends State<AsasViewer> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Expanded(child: CategoriesDropdown()),
-                //SouarDropdown(),
-
-                Text("catSelected ${controller.categorySelected} "),
-                //              Text("${controller.souraAsasList.length} souras  "),
+                Text("dropdown cat "),
+                Text("dropdown soura "),
+                Text("${c.souraAsasList.length} souras  "),
                 Switch(
-                    value: controller.asasTest,
+                    value: c.asasTest,
                     onChanged: (bool tst) {
-                      controller.asasTest = tst;
+                      c.asasTest = tst;
                     })
               ],
             ),
             Expanded(
               child: ListView.builder(
-                  itemCount: souraAsasList.length,
+                  itemCount: c.souraAsasList.length,
                   itemBuilder: (BuildContext contect, int index) {
                     return Dismissible(
                       direction: DismissDirection.startToEnd,
@@ -72,11 +52,11 @@ class _AsasViewerState extends State<AsasViewer> {
                       ),
                       onDismissed: (direction) => {
                         if (direction == DismissDirection.startToEnd)
-                          {_catOrder.add(souraAsasList[index]["souraNb"])}
+                          {_catOrder.add(c.souraAsasList[index]["souraNb"])}
                       },
                       child: ListTile(
                         onTap: () {
-                          debugPrint(souraAsasList[index]["souraName"]);
+                          debugPrint(c.souraAsasList[index]["souraName"]);
                         },
                         trailing: Icon(
                           Icons.check_box_outlined,
@@ -89,8 +69,8 @@ class _AsasViewerState extends State<AsasViewer> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                  "index : $index      ${souraAsasList[index]["souraName"]}"),
-                              Text("${souraAsasList[index]["souraNb"]}"),
+                                  "index : $index      ${c.souraAsasList[index]["souraName"]}"),
+                              Text("${c.souraAsasList[index]["souraNb"]}"),
                             ],
                           ),
                         ),
@@ -107,7 +87,3 @@ class _AsasViewerState extends State<AsasViewer> {
     );
   }
 }
-/**
- * 
-
- */

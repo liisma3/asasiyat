@@ -5,13 +5,27 @@ import 'package:asasiyat/widgets/reusable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class StagNavbar extends StatelessWidget {
-  const StagNavbar({super.key});
+class SouraNavbar extends StatefulWidget {
+  int souraNb = 0;
+  SouraNavbar({super.key, required int this.souraNb});
+
+  @override
+  State<SouraNavbar> createState() => _SouraNavbarState();
+}
+
+class _SouraNavbarState extends State<SouraNavbar> {
+  get souraNb => null;
 
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(StageController());
+    // final isGuest = this.grid > 10 ? true : false;
+    var souraNb;
+    initState() {
+      souraNb = widget.souraNb;
+    }
 
+    print(controller.isGuest);
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -22,10 +36,16 @@ class StagNavbar extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            CircleAvatar(
-              radius: 25,
-              backgroundImage: AssetImage('/flags/ad.png'),
-            ),
+            controller.isGuest
+                ? CircleAvatar(
+                    radius: 25,
+                    backgroundImage: AssetImage('/flags/ad.png'),
+                  )
+                : ElevatedButton.icon(
+                    icon: Icon(Icons.star_border_outlined),
+                    label: Text('return to stages'),
+                    onPressed: () => {Get.toNamed("/stages/3")},
+                  ),
             Padding(
               padding: const EdgeInsets.all(10),
               child: Column(
@@ -33,7 +53,9 @@ class StagNavbar extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ReusableText(
-                      text: "guest 112",
+                      text: controller.isGuest
+                          ? "guest ${controller.guestRegistred} stage soura ${this.souraNb} "
+                          : "stage soura ${widget.souraNb}",
                       style:
                           appStyle(20, Colors.yellowAccent, FontWeight.w600)),
                   ReusableText(

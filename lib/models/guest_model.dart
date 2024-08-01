@@ -11,26 +11,28 @@ import 'dart:math';
 String gridToJson(List<Grid> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
  */
-
 class Guest {
+
   final int tokenId;
   final int? phoneNb;
   final int host;
-  String? collaboratorId;
+  String? collaboratorId; //O6cKgXEsuPNAuzCMTGeblWW9sWI3
   String? flag;
-  List<String>? Stage;
+  List<String>? stages;
   DateTime? createdAt;
 
   Guest({
     required this.tokenId,
     this.phoneNb,
     required this.host,
+    required this.collaboratorId,
   });
   Map<String, dynamic>? toMap() {
     return <String, dynamic>{
-      "tokenId": tokenId,
-      "host": (host != null) ? host : 0,
-      "phoneNb": phoneNb,
+      "tokenId": this.tokenId,
+      "host": (this.host != null) ? this.host : 0,
+      "phoneNb": this.phoneNb,
+      "collaboratorId": this.collaboratorId,
     };
   }
 
@@ -40,7 +42,8 @@ class Guest {
     return Guest(
         tokenId: map["tokenId"] as int? ?? tempId,
         host: map["host"] as int? ?? 0,
-        phoneNb: map["phoneNb"]);
+        phoneNb: map["phoneNb"],
+        collaboratorId: map["collaboratorId"]);
   }
   factory Guest.fromJson(String source) {
     return Guest.fromMap(json.decode(source) as Map<String, dynamic>);

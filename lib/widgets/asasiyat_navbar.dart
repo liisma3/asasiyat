@@ -2,8 +2,7 @@ import 'package:asasiyat/constants/style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
-AppBar AsasiatNavBar(
+AppBar AsasiyatNavBar(
     {required BuildContext context,
     required GlobalKey<ScaffoldState> key,
     required String title,
@@ -21,12 +20,12 @@ AppBar AsasiatNavBar(
           onPressed: () {
             Get.toNamed('/home');
           },
-          icon: const Icon(Icons.arrow_back_outlined)),
+          icon: const Icon(Icons.home)),
       IconButton(
           onPressed: () {
             Get.toNamed('/$nextRoute');
           },
-          icon: const Icon(Icons.arrow_forward_outlined)),
+          icon: const Icon(Icons.forward)),
     ],
     elevation: 10,
   );

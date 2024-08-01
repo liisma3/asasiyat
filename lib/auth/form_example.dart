@@ -8,13 +8,10 @@ class FormExample extends StatefulWidget {
 }
 
 class _FormExampleState extends State<FormExample> {
-
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-
-  final _formKey = GlobalKey<FormState>();
-
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -30,25 +27,27 @@ class _FormExampleState extends State<FormExample> {
             children: [
               TextFormField(
                 controller: emailController,
-                onChanged: (value){},
-                validator: (value){
-                  if(value == null || value.isEmpty){
+                onChanged: (value) {},
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
                     return 'Pls enter your email';
                   }
                   return null;
                 },
                 decoration: InputDecoration(
-                  hintText: 'Enter your email',
-                  hintStyle: const TextStyle(color: Colors.grey),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(4))
-                ),
+                    hintText: 'Enter your email',
+                    hintStyle: const TextStyle(color: Colors.grey),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4))),
               ),
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
               TextFormField(
                 controller: passwordController,
-                onChanged: (value){},
-                validator: (value){
-                  if(value == null || value.isEmpty){
+                onChanged: (value) {},
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
                     return 'Pls enter your password';
                   }
                   return null;
@@ -56,25 +55,23 @@ class _FormExampleState extends State<FormExample> {
                 decoration: InputDecoration(
                     hintText: 'Enter your password',
                     hintStyle: const TextStyle(color: Colors.grey),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(4))
-                ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4))),
               ),
-              const SizedBox(height: 30,),
+              const SizedBox(
+                height: 30,
+              ),
               ElevatedButton(
-                onPressed: (){
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      String email = emailController.text;
+                      String password = passwordController.text;
 
-                  if(_formKey.currentState!.validate()){
-
-                    String email = emailController.text;
-                    String password = passwordController.text;
-
-                    print('email: $email');
-                    print('password: $password');
-
-                  }
-
-                },
-                child: const Text('Submit'))
+                      print('email: $email');
+                      print('password: $password');
+                    }
+                  },
+                  child: const Text('Submit'))
             ],
           ),
         ),

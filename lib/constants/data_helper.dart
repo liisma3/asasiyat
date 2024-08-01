@@ -1,8 +1,26 @@
 import 'dart:core';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 
 class DataHelper {
+static   List shuffleArray( List array){
+
+    var random = Random(); //import 'dart:math';
+
+    // Go through all elementsof list
+    for (var i = array.length - 1; i > 0; i--) {
+
+      // Pick a random number according to the lenght of list
+      var n = random.nextInt(i + 1);
+      var temp = array[i];
+      array[i] = array[n];
+      array[n] = temp;
+    }
+    return array;
+  }
+
+
   static Map<String, List<Map<String, dynamic>>> CategoryLabel = {
     'MOFASAL': [
       {"souraName": "Adh-Dhaariyat", "souraNb": 51},
