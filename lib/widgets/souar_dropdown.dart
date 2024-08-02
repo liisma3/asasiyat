@@ -47,11 +47,11 @@ class _SouarDropdownState extends State<SouarDropdown> {
             icon: const Icon(Icons.keyboard_arrow_down),
             isDense: true,
             // isExpanded: true,
-            items: names.map((souraName) {
+            items: souarNames.map((souraName) {
               //print(souraName);
               return DropdownMenuItem<String>(
-                value: souraName.toString(),
-                child: Text(souraName.toString()),
+                value: souraName["souraName"].toString(),
+                child: Text(souraName["souraName"].toString()),
               );
             }).toList(),
             value: controller.souraNameSelected != souraNameSelected
@@ -62,6 +62,9 @@ class _SouarDropdownState extends State<SouarDropdown> {
             onChanged: (value) {
               controller.setSouraNameSelected = value!;
               souraNameSelected = value;
+              var sNb = controller.getSouraNb();
+              controller.setSouraNb = sNb;
+              // print(value);
               setState(() {});
             }),
       ),

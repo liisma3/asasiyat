@@ -22,7 +22,7 @@ Widget asasdrawer({required context}) {
         ElevatedButton(
             onPressed: () {
 //              debugPrint('login');
-              Get.toNamed('/sign-in');
+              Get.toNamed('/login');
             },
             child: Text('register / login')),
         ListTile(

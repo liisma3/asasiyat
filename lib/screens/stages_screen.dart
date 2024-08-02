@@ -1,13 +1,14 @@
 //import 'package:asas/stage-module/stages_viewer.dart';
-import 'dart:math';
+import 'dart:convert';
 
 import 'package:asasiyat/constants/data_helper.dart';
 import 'package:asasiyat/controllers/stage_controller.dart';
 import 'package:asasiyat/widgets/asasiyat-drawer.dart';
 import 'package:asasiyat/widgets/stage_asasiyat_navbar.dart';
 import 'package:asasiyat/widgets/stage_bottom_navigation.dart';
-import 'package:asasiyat/widgets/stage_categories_list.dart';
+import 'package:asasiyat/widgets/stage_drop_down_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -22,11 +23,12 @@ class StagesScreen extends StatefulWidget {
 class _StagesScreenState extends State<StagesScreen> {
   final GlobalKey scaffoldKey = GlobalKey();
   final int gridNb = int.parse(Get.parameters['grid']!);
+
   /* List<Map<String, dynamic>> souarNames = DataHelper
+  
       .CategoryLabel["${DataHelper.CategoryLabel.keys.toList()[0]}"]!
       .toList();
  */
-  final controller = Get.put(StageController());
   List<int> sortGridTest = [0];
   late Set souarShuffeled = Set();
   late Set souarNamesSet = Set();
@@ -40,15 +42,12 @@ class _StagesScreenState extends State<StagesScreen> {
     });
   }
 
+  static final storage = GetStorage('asasStorage');
+  final guestToken = storage.read("guestToken ");
+  final hostToken = storage.read("hostToken");
+  final phoneNb = storage.read("phoneNb");
   @override
   void initState() {
-    var storage = GetStorage('asasStorage');
-    final guestToken = storage.read("guestToken ");
-    final hostToken = storage.read("hostToken");
-    final phoneNb = storage.read("phoneNb");
-
-    print(
-        "registred ${controller.guestRegistred} guest  ${guestToken} host $hostToken phone $phoneNb");
     /* final List souarNames =
         List.filled(DataHelper.(DataHelper.CategoryLabel.keys.toList()[0]), 0); */
     /*  print(
@@ -66,11 +65,23 @@ class _StagesScreenState extends State<StagesScreen> {
     super.initState();
   }
 
+  static final StageController controller = Get.put(StageController());
+
+  final souarNames =
+      DataHelper.CategoryLabel[controller.categorySelected]!.toList();
+  Future<Map<String, dynamic>> loadJsonFromAssets(String filePath) async {
+    String jsonString = await rootBundle.loadString(filePath);
+    return jsonDecode(jsonString);
+  }
+
   @override
   Widget build(BuildContext context) {
-    controller.setGridNb = gridNb;
+    print(controller.souraNameSelected);
+    print(controller.categorySelected);
+    print(controller.souraNb.toString());
 
-    print(controller.stageCategorySelected);
+    //controller.setGridNb = gridNb;
+
     return Scaffold(
         drawer: asasdrawer(context: context),
         appBar: PreferredSize(
@@ -84,8 +95,10 @@ class _StagesScreenState extends State<StagesScreen> {
               Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(10),
-                  child: StageCategoriesList(
-                      getSouarShuffeled: getSouarShuffeled)),
+                  child: StageDropDownWidget()
+                  /*  StageCategoriesList(
+                      getSouarShuffeled: getSouarShuffeled) */
+                  ),
               (Obx(
                 () => Expanded(
                     flex: 9,
@@ -99,8 +112,10 @@ class _StagesScreenState extends State<StagesScreen> {
                           ? Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                  Text(controller.stageCategorySelected),
-                                  Expanded(
+                                  Text(controller.categorySelected),
+                                  Text(controller.souraNameSelected),
+
+                                  /*    Expanded(
                                     child: ReorderableListView(
                                         onReorder: (oldIndex, newIndex) {
                                           print(
@@ -269,6 +284,7 @@ class _StagesScreenState extends State<StagesScreen> {
                                                 )
                                               ]),
                                   )
+                               */
                                 ])
                           : Text(" please select a category"),
                     )),

@@ -3,8 +3,7 @@ import 'package:asasiyat/constants/style.dart';
 import 'package:asasiyat/controllers/stage_controller.dart';
 import 'package:asasiyat/widgets/asasiyat-drawer.dart';
 import 'package:asasiyat/widgets/bottom_navigation.dart';
-import 'package:asasiyat/widgets/categories_dropdown.dart';
-import 'package:asasiyat/widgets/souar_dropdown.dart';
+import 'package:asasiyat/widgets/stage_drop_down_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -26,11 +25,16 @@ class _AsasViewerState extends State<AsasViewer> {
   Widget build(BuildContext context) {
     StageController controller = Get.put(StageController());
 
-    /* print("categories : ${controller.categorySelected}");
-    List<Map<String, dynamic>> souraAsasList =
+    //  print("categories : ${controller.testSelected}");
+    /*  List<Map<String, dynamic>> souraAsasList =
         DataHelper.CategoryLabel["${controller.categorySelected}"]!.toList();
+    */ // print("asasViewer ${souraAsasList}");
+    //  print("asasViewer ${controller.categorySelected}");
+    bool testSelected =
+        controller.testSelected ? controller.testSelected : false;
 
-    print("asasViewer ${souraAsasList}");
+    /*
+
  */
     //Map<String, List<Map<String, dynamic>>>
     // var keys = DataHelper.CategoryLabel.keys.toList();
@@ -48,24 +52,7 @@ class _AsasViewerState extends State<AsasViewer> {
       body: Obx(
         () => Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Expanded(child: CategoriesDropdown()),
-                Expanded(
-                  child: SouarDropdown(),
-                ),
-
-                Text(
-                    "Number of souar ${DataHelper.CategoryLabel["${controller.categorySelected}"]!.toList().length} "),
-                //              Text("${controller.souraAsasList.length} souras  "),
-                Switch(
-                    value: controller.asasTest,
-                    onChanged: (bool tst) {
-                      controller.asasTest = tst;
-                    })
-              ],
-            ),
+            StageDropDownWidget(),
             Expanded(
               flex: 9,
 
@@ -89,13 +76,14 @@ class _AsasViewerState extends State<AsasViewer> {
                           ],
                         ),
                       ),
-                      onDismissed: (direction) => {
-                      },
+                      onDismissed: (direction) => {},
                       child: ListTile(
                         onTap: () {
-                        //  if (direction == DismissDirection.startToEnd)
-                          {_catOrder.add(DataHelper.CategoryLabel["${controller.categorySelected}"]!
-                              .toList()[index]["souraNb"]);
+                          //  if (direction == DismissDirection.startToEnd)
+                          {
+                            _catOrder.add(DataHelper.CategoryLabel[
+                                    "${controller.categorySelected}"]!
+                                .toList()[index]["souraNb"]);
                           }
                           debugPrint(DataHelper
                               .CategoryLabel["${controller.categorySelected}"]!
@@ -113,8 +101,10 @@ class _AsasViewerState extends State<AsasViewer> {
                             children: [
                               Text(
                                   "index : $index      ${DataHelper.CategoryLabel["${controller.categorySelected}"]!.toList()[index]["souraName"]}"),
-                              Text(
-                                  "${DataHelper.CategoryLabel["${controller.categorySelected}"]!.toList()[index]["souraNb"]}"),
+                              !testSelected
+                                  ? Text(
+                                      "${DataHelper.CategoryLabel["${controller.categorySelected}"]!.toList()[index]["souraNb"]}")
+                                  : Text("___"),
                             ],
                           ),
                         ),

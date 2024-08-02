@@ -2,7 +2,6 @@
 
 import 'package:asasiyat/auth/firebase_guest_controller.dart';
 import 'package:asasiyat/controllers/stage_controller.dart';
-import 'package:asasiyat/models/guest_auth.dart';
 import 'package:asasiyat/widgets/top_navbar.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
@@ -124,14 +123,18 @@ class _AuthFormState extends State<AuthForm> {
                           keyboardType: TextInputType.number,
                           controller: phoneNbController,
                           onChanged: (value) {
+                            //  phoneNbController.text = value;
+                            // setState(() {});
                             //setState(() {});
                           },
                           decoration: InputDecoration(
                             hintText: 'Enter your phone number',
                             suffixIcon: InkWell(
                               onTap: () async {
-                                await GuestAuth().loginWithPhone(
+                                /**
+                                * await GuestAuth().loginWithPhone(
                                     phoneNb: phoneNbController.text);
+                                *  */
                               },
                               child: Container(
                                 height: 50,
@@ -194,8 +197,6 @@ class _AuthFormState extends State<AuthForm> {
                                             ),
                                           ),
                                         ));
-
-//_____________
                                   },
                                 )),
                             hintStyle: TextStyle(color: Colors.grey.shade400),
@@ -221,11 +222,7 @@ class _AuthFormState extends State<AuthForm> {
                     },
                     keyboardType: TextInputType.number,
                     controller: guestController,
-                    onChanged: (value) {
-                      setState(() {
-                        guestController.text = value;
-                      });
-                    },
+                    onChanged: (value) {},
                     decoration: InputDecoration(
                       hintText: 'Enter Guest token',
                       prefixIcon: Icon(Icons.login),
@@ -289,15 +286,14 @@ class _AuthFormState extends State<AuthForm> {
                                     int.parse(phoneNbController.text),
                                 controller.setHostRegistred =
                                     int.parse(hostController.text),
-                                /* storage.write(
+                                storage.write(
                                   "guestToken ",
                                   int.parse(guestController.text),
                                 ),
-                                storage.write(
-                                    "hostToken", int.parse(hostController.text)),
-                                storage.write(
-                                    "phoneNb", int.parse(phoneNbController.text)), */
-
+                                storage.write("hostToken",
+                                    int.parse(hostController.text)),
+                                storage.write("phoneNb",
+                                    int.parse(phoneNbController.text)),
                                 await FirebaseGuestController().registerGuest(
                                     phoneNb: phoneNbController.text,
                                     guest: int.parse(guestController.text),

@@ -20,14 +20,15 @@ class CategoriesDropdown extends StatefulWidget {
 class _CategoriesDropdownState extends State<CategoriesDropdown> {
   GlobalKey catDropdownKey = GlobalKey();
 
-  final controller = Get.put(StageController());
-  static List<String> categories = DataHelper.CategoryLabel.keys.toList();
-  static String cat = categories.first;
-  static List<Map<String, dynamic>> _souraAsasList =
+/*   static List<Map<String, dynamic>> _souraAsasList =
       DataHelper.CategoryLabel[cat]!.toList();
-  String categorySelected = cat;
   @override
+ */
   Widget build(BuildContext context) {
+    final controller = Get.put(StageController());
+    List<String> categories = DataHelper.CategoryLabel.keys.toList();
+    final String cat = categories.first;
+    String categorySelected = cat;
     return Container(
       height: 20,
       child: Obx(() => DropdownButton<String>(

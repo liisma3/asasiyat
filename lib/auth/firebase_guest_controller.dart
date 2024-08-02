@@ -17,10 +17,10 @@ class FirebaseGuestController {
       EncryptionService enc = EncryptionService();
       enc.init();
       String encrypted = enc.encryptData(phoneNb);
-      print(encrypted);
+      //print(encrypted);
       var r = Random();
       final flagIndex = await r.nextInt(DataHelper.flags.length);
-      print(flagIndex);
+      //print(flagIndex);
 
       //print(phoneNb);
       // FirebaseFirestore _firestore = await FirebaseFirestore.instance;

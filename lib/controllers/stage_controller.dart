@@ -168,6 +168,7 @@ class StageController extends GetxController {
   set setPhoneRegistred(int gRe) {
     _phoneRegistred.value = gRe;
   }
+
 //______Guest Object
 /*   Rx _phoneRegistred = 0.obs;
 
@@ -176,4 +177,25 @@ class StageController extends GetxController {
     _phoneRegistred.value = gRe;
   }
  */
+  RxInt _souraNb = 0.obs;
+
+  int get souraNb => _souraNb.value;
+  set setSouraNb(int sNb) {
+    _souraNb.value = sNb;
+  }
+
+  int getSouraNb() {
+    final souarNames = DataHelper.CategoryLabel[categorySelected]!.toList();
+
+    var souraNb = 0;
+    if (souarNames.isNotEmpty) {
+      souarNames.forEach((item) {
+        if (item['souraName'] == souraNameSelected) {
+          souraNb = item['souraNb'];
+        }
+      });
+    }
+    print("souraNb : $souraNb");
+    return souraNb;
+  }
 }
